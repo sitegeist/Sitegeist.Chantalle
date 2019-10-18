@@ -9,6 +9,8 @@ the following command.
 ./flow package:adopt Neos.Demo Vendor.Site
 ```
 
+The package `Neos.Demo` that has to be installed will be copied to the new
+name `Vendor.Site` in the local DistributionPackages folder.
 Afterwards you can require the new package and remove the original one.
 
 ## Installation
