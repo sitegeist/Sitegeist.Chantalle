@@ -1,5 +1,5 @@
 # Sitegeist.Chantalle
-## Adopt packages into local distributiuon packahes with a new name
+## Adopt packages into the local DistributionPackages folder under a new name
 
 The package allows to copy an already installed package into the local 
 DistributionPackages folder and adjust the namespace at the same time with
