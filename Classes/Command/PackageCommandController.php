@@ -65,7 +65,7 @@ class PackageCommandController extends CommandController
         // copy package
         $sourcePackagePath = realpath($sourcePackage->getPackagePath());
         $targetPackagePath = realpath($packagesPath) . DIRECTORY_SEPARATOR . $target;
-        Files::copyDirectoryRecursively($sourcePackagePath, $targetPackagePath);
+        Files::copyDirectoryRecursively($sourcePackagePath, $targetPackagePath, false, true);
 
         $sourcePackageDescription = new PackageKey($source);
         $targetPackagedescription = new PackageKey($target);
