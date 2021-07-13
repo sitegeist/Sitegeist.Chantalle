@@ -35,7 +35,7 @@ class ConfigurationAdjustmentService
                 $configurationWasAltered = false;
 
                 foreach ($replacePathes as $replacement) {
-                    if ($affectedConfiguration = Arrays::getValueByPath($configuration, $replacement['source'])) {
+                    if (is_array($configuration) && $affectedConfiguration = Arrays::getValueByPath($configuration, $replacement['source'])) {
                         $configuration = Arrays::setValueByPath($configuration, $replacement['target'], $affectedConfiguration);
                         $configuration = Arrays::unsetValueByPath($configuration, $replacement['source']);
                         $configurationWasAltered = true;
