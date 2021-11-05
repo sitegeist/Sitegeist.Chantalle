@@ -12,19 +12,19 @@ class ConfigurationAdjustmentService
      * @param array $replacements key=>value pairs
      * @param $baseDirectory
      */
-    public static function replaceSettingPathes(array $replacements, $baseDirectory)
+    public static function replaceSettingPaths(array $replacements, $baseDirectory)
     {
         $dir      = new \RecursiveDirectoryIterator($baseDirectory . DIRECTORY_SEPARATOR . 'Configuration', \FilesystemIterator::SKIP_DOTS);
         $iterator = new \RecursiveIteratorIterator($dir);
 
-        $replacePathes = [];
+        $replacePaths = [];
         foreach ($replacements as $source => $target) {
-            $replacePathes[] = [
+            $replacePaths[] = [
                 'source' => explode('.', $source),
                 'target' => explode('.', $target)
             ];
         }
-
+        
         /** @var \SplFileInfo $item */
         foreach ($iterator as $item) {
             if (!$item->isFile()) {
@@ -34,7 +34,7 @@ class ConfigurationAdjustmentService
                 $configuration = Yaml::parseFile($item->getRealPath());
                 $configurationWasAltered = false;
 
-                foreach ($replacePathes as $replacement) {
+                foreach ($replacePaths as $replacement) {
                     if (is_array($configuration) && $affectedConfiguration = Arrays::getValueByPath($configuration, $replacement['source'])) {
                         $configuration = Arrays::setValueByPath($configuration, $replacement['target'], $affectedConfiguration);
                         $configuration = Arrays::unsetValueByPath($configuration, $replacement['source']);

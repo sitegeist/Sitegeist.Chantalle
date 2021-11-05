@@ -7,7 +7,8 @@ use Neos\ContentRepository\Utility;
 
 class PackageKey
 {
-    protected $packageKey;
+    protected $vendor;
+    protected $name;
 
     /**
      * PackageDescription constructor.
@@ -18,7 +19,7 @@ class PackageKey
      */
     public function __construct(string $packageKey)
     {
-        $this->packageKey = $packageKey;
+        list($this->vendor, $this->name) = explode('.', $packageKey, 2);
     }
 
     /**
@@ -34,7 +35,23 @@ class PackageKey
      */
     public function getPackageKey(): string
     {
-        return $this->packageKey;
+        return $this->vendor . '.' . $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVendor(): string
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**
@@ -42,7 +59,14 @@ class PackageKey
      */
     public function getComposerName(): string
     {
-        list($vendor, $name) = explode('.', $this->packageKey, 2);
+        return static::buildComposerName($this->vendor, $this->name);
+    }
+
+    /**
+     * @return string
+     */
+    public static function buildComposerName($vendor, $name): string
+    {
         return strtolower($vendor) . '/' . strtolower(str_replace('.', '-', $name));
     }
 
@@ -51,7 +75,7 @@ class PackageKey
      */
     public function getPhpNamespace(): string
     {
-        return str_replace('.', '\\', $this->packageKey);
+        return str_replace('.', '\\', $this->getPackageKey());
     }
 
     /**
@@ -59,6 +83,6 @@ class PackageKey
      */
     public function getRootNodeName(): string
     {
-        return Utility::renderValidNodeName($this->packageKey);
+        return Utility::renderValidNodeName($this->getPackageKey());
     }
 }
