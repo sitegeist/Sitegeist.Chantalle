@@ -75,6 +75,6 @@ class PackageCommandController extends CommandController
         $this->outputLine(sprintf('Package %s was adopted as %s in path %s', $source, $target, $targetPackagePath));
         $this->outputLine();
         $this->outputLine(sprintf('Please run `composer require %s && composer remove %s` to finalize this.', $targetPackageDescription->getComposerName(), $sourcePackageDescription->getComposerName()));
-        $this->outputLine(sprintf('Also consider to remove CreativeResort.Chantalle with `composer remove sitegeist/chantalle`'));
+        $this->outputLine(sprintf('Also consider to remove Sitegeist.Chantalle with `composer remove sitegeist/chantalle`'));
     }
 }
