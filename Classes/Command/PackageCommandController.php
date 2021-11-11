@@ -68,13 +68,13 @@ class PackageCommandController extends CommandController
         Files::copyDirectoryRecursively($sourcePackagePath, $targetPackagePath, false, true);
 
         $sourcePackageDescription = new PackageKey($source);
-        $targetPackagedescription = new PackageKey($target);
-        PackageService::alterPackageNamespace($targetPackagePath, $sourcePackageDescription, $targetPackagedescription);
+        $targetPackageDescription = new PackageKey($target);
+        PackageService::alterPackageNamespace($targetPackagePath, $sourcePackageDescription, $targetPackageDescription);
 
         // final message
         $this->outputLine(sprintf('Package %s was adopted as %s in path %s', $source, $target, $targetPackagePath));
         $this->outputLine();
-        $this->outputLine(sprintf('Please run `composer require %s && composer remove %s` to finalize this.', $targetPackagedescription->getComposerName(), $sourcePackageDescription->getComposerName()));
+        $this->outputLine(sprintf('Please run `composer require %s && composer remove %s` to finalize this.', $targetPackageDescription->getComposerName(), $sourcePackageDescription->getComposerName()));
         $this->outputLine(sprintf('Also consider to remove Sitegeist.Chantalle with `composer remove sitegeist/chantalle`'));
     }
 }

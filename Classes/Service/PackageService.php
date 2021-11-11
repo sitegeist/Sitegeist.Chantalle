@@ -2,6 +2,7 @@
 namespace Sitegeist\Chantalle\Service;
 
 use Neos\Flow\Package\FlowPackageInterface;
+use Neos\Flow\Composer\ComposerUtility;
 use Sitegeist\Chantalle\Domain\PackageKey;
 
 class PackageService
@@ -25,18 +26,18 @@ class PackageService
         $configPathReplacements = [];
         $configPathReplacements[$source->getPackageKey()] = $target->getPackageKey();
 
-        ConfigurationAdjustmentService::replaceSettingPathes($configPathReplacements, $path);
+        ConfigurationAdjustmentService::replaceSettingPaths($configPathReplacements, $path);
 
-        JsonFileService::modifyFile(
-            $path . DIRECTORY_SEPARATOR . 'composer.json',
-            [
-                'name' => $target->getComposerName(),
-                'extra' => [
-                    'neos' => [
-                        'package-key' => $target->getPackageKey()
-                    ]
-                ]
-            ]
-        );
+        $manifest = ComposerUtility::getComposerManifest($path . DIRECTORY_SEPARATOR);
+        list($vendor, $name) = explode('/', $manifest['name']);
+
+        // only replace vendor if it's a different one and thus keep the exact spelling as before, if it's the same
+        if ( strcasecmp($source->getVendor(), $target->getVendor()) != 0 ) {
+            $vendor = $target->getVendor();
+        }
+
+        $manifest['name'] = PackageKey::buildComposerName($vendor, $target->getName());
+
+        ComposerUtility::writeComposerManifest($path . DIRECTORY_SEPARATOR, $target->getPackageKey(), $manifest);
     }
 }
