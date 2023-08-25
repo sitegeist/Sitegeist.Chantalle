@@ -3,20 +3,13 @@ declare(strict_types=1);
 
 namespace Sitegeist\Chantalle\Domain;
 
-use Neos\ContentRepository\Utility;
+use Neos\ContentRepository\Core\SharedModel\Node\NodeName;
 
 class PackageKey
 {
     protected $vendor;
     protected $name;
 
-    /**
-     * PackageDescription constructor.
-     * @param string $packageKey
-     * @param string $composerName
-     * @param string $phpNamespaces
-     * @param string $rootNodeName
-     */
     public function __construct(string $packageKey)
     {
         list($this->vendor, $this->name) = explode('.', $packageKey, 2);
@@ -83,6 +76,6 @@ class PackageKey
      */
     public function getRootNodeName(): string
     {
-        return Utility::renderValidNodeName($this->getPackageKey());
+        return NodeName::transliterateFromString($this->getPackageKey())->value;
     }
 }
