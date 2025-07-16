@@ -1,7 +1,7 @@
 <?php
 namespace Sitegeist\Chantalle\Service;
 
-use Neos\Flow\Package\FlowPackageInterface;
+use Neos\Flow\Package\FlowPackageKey;
 use Neos\Flow\Composer\ComposerUtility;
 use Sitegeist\Chantalle\Domain\PackageKey;
 
@@ -38,6 +38,10 @@ class PackageService
 
         $manifest['name'] = PackageKey::buildComposerName($vendor, $target->getName());
 
-        ComposerUtility::writeComposerManifest($path . DIRECTORY_SEPARATOR, $target->getPackageKey(), $manifest);
+        ComposerUtility::writeComposerManifest(
+            $path . DIRECTORY_SEPARATOR,
+            FlowPackageKey::fromString($target->getPackageKey()),
+            $manifest
+        );
     }
 }
