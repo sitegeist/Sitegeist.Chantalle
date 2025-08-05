@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Sitegeist\Chantalle\Domain;
 
-use Neos\ContentRepository\Utility;
-
 class PackageKey
 {
     protected $vendor;
@@ -83,6 +81,6 @@ class PackageKey
      */
     public function getRootNodeName(): string
     {
-        return Utility::renderValidNodeName($this->getPackageKey());
+        return preg_replace('/[^a-zA-Z0-9\-]/', '-', strtolower($this->getPackageKey()));
     }
 }
