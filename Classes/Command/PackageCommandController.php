@@ -9,6 +9,8 @@ use Neos\Flow\Composer\ComposerUtility;
 use Neos\Utility\Files;
 use Sitegeist\Chantalle\Domain\PackageKey;
 use Sitegeist\Chantalle\Service\PackageService;
+use Sitegeist\Chantalle\Service\MigrationGenerationService;
+
 
 class PackageCommandController extends CommandController
 {
@@ -17,6 +19,12 @@ class PackageCommandController extends CommandController
      * @Flow\Inject
      */
     protected $packageManager;
+
+    /**
+     * @var MigrationGenerationService
+     * @Flow\Inject
+     */
+    protected $migrationGenerationService;
 
     /**
      * Adopt a package to the distribution packages folder and adjust the package name
@@ -71,8 +79,13 @@ class PackageCommandController extends CommandController
         $targetPackageDescription = new PackageKey($target);
         PackageService::alterPackageNamespace($targetPackagePath, $sourcePackageDescription, $targetPackageDescription);
 
+        $this->outputLine("Creating Node Migration File ...");
+        $migrationIdentifier = $this->migrationGenerationService->createNodeMigration($source , $target, $targetPackagePath);
+
         // final message
         $this->outputLine(sprintf('Package %s was adopted as %s in path %s', $source, $target, $targetPackagePath));
+        $this->outputLine();
+        $this->outputLine(sprintf('running `./flow node:migrate %s` renames also the node types in the content repository', $migrationIdentifier));
         $this->outputLine();
         $this->outputLine(sprintf('Please run `composer require %s && composer remove %s` to finalize this.', $targetPackageDescription->getComposerName(), $sourcePackageDescription->getComposerName()));
         $this->outputLine(sprintf('Also consider to remove Sitegeist.Chantalle with `composer remove sitegeist/chantalle`'));
